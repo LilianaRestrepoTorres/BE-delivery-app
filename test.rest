@@ -10,13 +10,12 @@ GET http://localhost:9393/robots/1
 ### Get robot by status
 GET http://localhost:9393/robots/available
 
-###
-GET http://localhost:9393/robot1?limit=10
-
-###
-POST http://localhost:9393
+### Create robot
+POST http://localhost:9393/addrobot
 Content-Type: application/json
 
 {
-  "robot": "robot1"
+    "id": 6,
+    "name": "Robot 6",
+    "status": "available"
 }

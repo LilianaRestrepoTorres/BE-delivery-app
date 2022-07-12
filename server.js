@@ -39,16 +39,16 @@ app.get('/robots/:status', (req, res) => {
     res.status(200).send({robots: robots.filter(robot => robot.status === status)});
 })
 
-app.post('/', (req, res) => {
-    const {robot} = req.body;
-    if (!robot) {
+
+// Endpoint for creating new robot
+app.post('/addrobot', (req, res) => {
+    const {id, name, status} = req.body;
+    const newRobot = {id, name, status};
+    if (!newRobot) {
         return res.status(400).send({message: 'Robot is required'});
     }
-    res.status(200).send({message: `Your robot is called: ${robot}`});
-})
-
-app.put('/', (req, res) => {
-    
+    robots.push(newRobot);
+    res.status(200).send({message: `Your robot was added successfully`});
 })
 
 app.delete('/', (req, res) => {
