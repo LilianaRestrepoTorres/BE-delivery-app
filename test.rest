@@ -1,0 +1,13 @@
+###
+GET http://localhost:9393
+
+###
+GET http://localhost:9393/robot1?limit=10
+
+###
+POST http://localhost:9393
+Content-Type: application/json
+
+{
+  "robot": "robot1",
+}
