@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const port = 9393;
+const { db } = require('./firebase.js');
 
 //Middleware
 app.use(express.json());
