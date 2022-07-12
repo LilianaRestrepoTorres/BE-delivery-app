@@ -19,3 +19,12 @@ Content-Type: application/json
     "name": "Robot 6",
     "status": "available"
 }
+
+### Update robot
+PATCH http://localhost:9393/updaterobot/2
+Content-Type: application/json
+
+{
+    "name": "Robot 2 update",
+    "status": "unavailable"
+}

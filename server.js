@@ -16,6 +16,7 @@ app.get('/', (req, res) => {
     res.status(200).send({message: 'Hello! This is backend of delivery app.'});
 })
 
+// Endpoint to get all robots
 app.get('/robots', (req, res) => {
     res.status(200).send(robots);
 })
@@ -39,7 +40,6 @@ app.get('/robots/:status', (req, res) => {
     res.status(200).send({robots: robots.filter(robot => robot.status === status)});
 })
 
-
 // Endpoint for creating new robot
 app.post('/addrobot', (req, res) => {
     const {id, name, status} = req.body;
@@ -49,6 +49,23 @@ app.post('/addrobot', (req, res) => {
     }
     robots.push(newRobot);
     res.status(200).send({message: `Your robot was added successfully`});
+})
+
+// Endpoint for updating robot
+app.patch('/updaterobot/:id', (req, res) => {
+    const {id} = req.params;
+    const {name, status} = req.body;
+    const robot = robots.find(robot => robot.id == id);
+    if (!robot) {
+        return res.status(404).send({message: 'Robot not found'});
+    }
+    if (name) {
+        robot.name = name;
+    }
+    if (status) {
+        robot.status = status;
+    }
+    res.status(200).send(robot);
 })
 
 app.delete('/', (req, res) => {
