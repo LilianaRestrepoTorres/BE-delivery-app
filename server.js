@@ -14,58 +14,45 @@ app.get('/', (req, res) => {
 // Deliveries Collection Firebase
 // Endpoint for getting deliveries from Firebase
 app.get('/deliveries', async (req, res) => {
-    const deliveriesRef = db.collection('deliveries').doc('delivery');
+    const deliveriesRef = db.collection('deliveries');
     const deliveries = await deliveriesRef.get();
-    if(!deliveries.exists) {
-        return res.status(404).send({message: 'Deliveries not found'});
-    }
+    let arrayDeliveries = [];
+    deliveries.forEach(doc => {
+        arrayDeliveries.push(doc.data());
+      });
     
-    res.status(200).send(deliveries.data());
+    res.status(200).send(arrayDeliveries);
 })
 
 // Endpoint for getting delivery by id
 app.get('/deliveries/:id', async (req, res) => {
     const {id} = req.params;
-    const deliveriesRef = db.collection('deliveries').doc('delivery');
-    //const deliveries = await deliveriesRef.listCollections();
+    const deliveriesRef = db.collection('deliveries').doc(id);
     const deliveries = await deliveriesRef.get();
-    console.log(deliveries.data());
-    deliveries.data().forEach(delivery => {
-        console.log(delivery);
-        // if(delivery.id === id) {
-        //     res.status(200).send(delivery.data());
-        // }
-    })
-    //const deliveries = await deliveriesRef.get();
-    //const bots = deliveries.find(delivery => delivery.id === id);
-    //console.log(bots);
-    //const res2 = await deliveriesRef.isEqual(id);
-    //console.log(res2);
+   
     if(!deliveries.exists) {
-        return res.status(404).send({message: 'Deliveries not found'});
+        return res.status(404).send({message: 'Delivery not found'});
     }
     
-    //res.status(200).send(deliveries.data());
+    res.status(200).send(deliveries.data());
 })
 
 // Endpoint for creating new delivery into Firebase
 app.post('/adddelivery', async (req, res) => {
     const {id, creation_date, state, pickup_lat, pickup_lon, dropoff_lat, dropoff_lon, zone_id} = req.body;
-    const deliveriesRef = db.collection('deliveries').doc('delivery');
-    const res2 = await deliveriesRef.set({
-        [id]: {
-            'creation_date': creation_date,
-            'state': state,
-            'pickup': {
-                'pickup_lat': pickup_lat,
-                'pickup_lon': pickup_lon
-                },
-            'dropoff': {
-                'dropoff_lat': dropoff_lat,
-                'dropoff_lon': dropoff_lon
-                },
-            'zone_id': zone_id
-        }
+    const deliveriesRef = db.collection('deliveries');
+    const res2 = await deliveriesRef.doc(id).set({
+        'creation_date': creation_date,
+        'state': state,
+        'pickup': {
+            'pickup_lat': pickup_lat,
+            'pickup_lon': pickup_lon
+            },
+        'dropoff': {
+            'dropoff_lat': dropoff_lat,
+            'dropoff_lon': dropoff_lon
+            },
+        'zone_id': zone_id
     }, {merge: true});
     if (!res2) {
         return res.status(400).send({message: 'Delivery is required'});
@@ -74,13 +61,11 @@ app.post('/adddelivery', async (req, res) => {
 })
 
 // Endpoint to change delivery state
-app.patch('/changestate', async (req, res) => {
+app.patch('/changestatedelivery', async (req, res) => {
     const {id, newState} = req.body;
-    const deliveriesRef = db.collection('deliveries').doc('delivery');
+    const deliveriesRef = db.collection('deliveries').doc(id);
     const res2 = await deliveriesRef.set({
-        [id]: {
-            'state': newState
-        }
+        'state': newState
     }, {merge: true});
     if (!res2) {
         return res.status(400).send({message: 'Delivery is required'});

@@ -6,14 +6,14 @@ GET http://localhost:9393
 GET http://localhost:9393/deliveries
 
 ### Query to get deliveries by id
-GET http://localhost:9393/deliveries/first
+GET http://localhost:9393/deliveries/2
 
 ### Query to add delivery
 POST http://localhost:9393/adddelivery
 Content-Type: application/json
 
 {
-    "id": "fifth",
+    "id": "1",
     "creation_date": "2022-07-13",
     "state": "pending",
     "pickup_lat": 1,
@@ -24,11 +24,11 @@ Content-Type: application/json
 }
 
 ### Query to update delivery state
-PATCH http://localhost:9393/changestate
+PATCH http://localhost:9393/changestatedelivery
 Content-Type: application/json
 
 {
-    "id": "fifth",
+    "id": "1",
     "newState": "assigned"
 }
 
