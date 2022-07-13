@@ -26,12 +26,21 @@ app.get('/deliveries', async (req, res) => {
 
 // Endpoint for creating new delivery into Firebase
 app.post('/adddelivery', async (req, res) => {
-    const {id, creation_date, state} = req.body;
+    const {id, creation_date, state, pickup_lat, pickup_lon, dropoff_lat, dropoff_lon, zone_id} = req.body;
     const deliveriesRef = db.collection('deliveries').doc('delivery');
     const res2 = await deliveriesRef.set({
         [id]: {
             'creation_date': creation_date,
-            'state': state
+            'state': state,
+            'pickup': {
+                'pickup_lat': pickup_lat,
+                'pickup_lon': pickup_lon
+                },
+            'dropoff': {
+                'dropoff_lat': dropoff_lat,
+                'dropoff_lon': dropoff_lon
+                },
+            'zone_id': zone_id
         }
     }, {merge: true});
     if (!res2) {
@@ -42,11 +51,10 @@ app.post('/adddelivery', async (req, res) => {
 
 // Endpoint to change delivery state
 app.patch('/changestate', async (req, res) => {
-    const {id, creation_date, newState} = req.body;
+    const {id, newState} = req.body;
     const deliveriesRef = db.collection('deliveries').doc('delivery');
     const res2 = await deliveriesRef.set({
         [id]: {
-            'creation_date': creation_date,
             'state': newState
         }
     }, {merge: true});

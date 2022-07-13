@@ -10,9 +10,14 @@ POST http://localhost:9393/adddelivery
 Content-Type: application/json
 
 {
-    "id": "third",
-    "creation_date": "2022-07-12",
-    "state": "pending"
+    "id": "fifth",
+    "creation_date": "2022-07-13",
+    "state": "pending",
+    "pickup_lat": 1,
+    "pickup_lon": 2,
+    "dropoff_lat": 1,
+    "dropoff_lon": 2,
+    "zone_id": "zone2"
 }
 
 ### Query to update delivery state
@@ -20,7 +25,6 @@ PATCH http://localhost:9393/changestate
 Content-Type: application/json
 
 {
-    "id": "second",
-    "creation_date": "2022-07-12",
-    "newState": "free"
+    "id": "fifth",
+    "newState": "assigned"
 }
