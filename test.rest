@@ -28,3 +28,29 @@ Content-Type: application/json
     "id": "fifth",
     "newState": "assigned"
 }
+
+
+### Bots
+### Query to get all bots
+GET http://localhost:9393/bots
+
+### Query to add bot
+POST http://localhost:9393/addbot
+Content-Type: application/json
+
+{
+    "id": "first",
+    "status": "available",
+    "dropoff_lat": 1,
+    "dropoff_lon": 2,
+    "zone_id": "zone3"
+}
+
+### Query to update bots status
+PATCH http://localhost:9393/changebotstatus
+Content-Type: application/json
+
+{
+    "id": "first",
+    "newStatus": "reserved"
+}

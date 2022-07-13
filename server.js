@@ -23,7 +23,6 @@ app.get('/deliveries', async (req, res) => {
     res.status(200).send(deliveries.data());
 })
 
-
 // Endpoint for creating new delivery into Firebase
 app.post('/adddelivery', async (req, res) => {
     const {id, creation_date, state, pickup_lat, pickup_lon, dropoff_lat, dropoff_lon, zone_id} = req.body;
@@ -63,6 +62,55 @@ app.patch('/changestate', async (req, res) => {
     }
     
     res.status(200).send({message: `Your delivery was updated successfully`});
+})
+
+
+// Bots Collection Firebase
+// Endpoint for getting bots from Firebase
+app.get('/bots', async (req, res) => {
+    const botsRef = db.collection('bots').doc('bot');
+    const bots = await botsRef.get();
+    if(!bots.exists) {
+        return res.status(404).send({message: 'Bots not found'});
+    }
+    
+    res.status(200).send(bots.data());
+})
+
+// Endpoint for creating new bots into Firebase
+app.post('/addbot', async (req, res) => {
+    const {id, status, dropoff_lat, dropoff_lon, zone_id} = req.body;
+    const botsRef = db.collection('bots').doc('bot');
+    const res2 = await botsRef.set({
+        [id]: {
+            'status': status,
+            'location': {
+                'dropoff_lat': dropoff_lat,
+                'dropoff_lon': dropoff_lon
+                },
+            'zone_id': zone_id
+        }
+    }, {merge: true});
+    if (!res2) {
+        return res.status(400).send({message: 'Bot is required'});
+    }
+    res.status(200).send({message: `Your bot was added successfully`});
+})
+
+// Endpoint to change bot status
+app.patch('/changebotstatus', async (req, res) => {
+    const {id, newStatus} = req.body;
+    const botsRef = db.collection('bots').doc('bot');
+    const res2 = await botsRef.set({
+        [id]: {
+            'status': newStatus
+        }
+    }, {merge: true});
+    if (!res2) {
+        return res.status(400).send({message: 'Bot is required'});
+    }
+    
+    res.status(200).send({message: `Your bot was updated successfully`});
 })
 
 app.listen(port, () => {
