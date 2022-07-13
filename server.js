@@ -23,6 +23,31 @@ app.get('/deliveries', async (req, res) => {
     res.status(200).send(deliveries.data());
 })
 
+// Endpoint for getting delivery by id
+app.get('/deliveries/:id', async (req, res) => {
+    const {id} = req.params;
+    const deliveriesRef = db.collection('deliveries').doc('delivery');
+    //const deliveries = await deliveriesRef.listCollections();
+    const deliveries = await deliveriesRef.get();
+    console.log(deliveries.data());
+    deliveries.data().forEach(delivery => {
+        console.log(delivery);
+        // if(delivery.id === id) {
+        //     res.status(200).send(delivery.data());
+        // }
+    })
+    //const deliveries = await deliveriesRef.get();
+    //const bots = deliveries.find(delivery => delivery.id === id);
+    //console.log(bots);
+    //const res2 = await deliveriesRef.isEqual(id);
+    //console.log(res2);
+    if(!deliveries.exists) {
+        return res.status(404).send({message: 'Deliveries not found'});
+    }
+    
+    //res.status(200).send(deliveries.data());
+})
+
 // Endpoint for creating new delivery into Firebase
 app.post('/adddelivery', async (req, res) => {
     const {id, creation_date, state, pickup_lat, pickup_lon, dropoff_lat, dropoff_lon, zone_id} = req.body;
@@ -68,10 +93,23 @@ app.patch('/changestate', async (req, res) => {
 // Bots Collection Firebase
 // Endpoint for getting bots from Firebase
 app.get('/bots', async (req, res) => {
-    const botsRef = db.collection('bots').doc('bot');
+    const botsRef = db.collection('bots');
+    const snapshot = await botsRef.get();
+    let array = [];
+    snapshot.forEach(doc => {
+        array.push(doc.data());
+      });
+    
+    res.status(200).send(array);
+})
+
+// Endpoint for getting bot by id
+app.get('/bots/:id', async (req, res) => {
+    const {id} = req.params;
+    const botsRef = db.collection('bots').doc(id);
     const bots = await botsRef.get();
     if(!bots.exists) {
-        return res.status(404).send({message: 'Bots not found'});
+        return res.status(404).send({message: 'Bot not found'});
     }
     
     res.status(200).send(bots.data());
@@ -80,16 +118,14 @@ app.get('/bots', async (req, res) => {
 // Endpoint for creating new bots into Firebase
 app.post('/addbot', async (req, res) => {
     const {id, status, dropoff_lat, dropoff_lon, zone_id} = req.body;
-    const botsRef = db.collection('bots').doc('bot');
-    const res2 = await botsRef.set({
-        [id]: {
-            'status': status,
-            'location': {
-                'dropoff_lat': dropoff_lat,
-                'dropoff_lon': dropoff_lon
-                },
-            'zone_id': zone_id
-        }
+    const botsRef = db.collection('bots');
+    const res2 = await botsRef.doc(id).set({
+        'status': status,
+        'location': {
+            'dropoff_lat': dropoff_lat,
+            'dropoff_lon': dropoff_lon
+            },
+        'zone_id': zone_id
     }, {merge: true});
     if (!res2) {
         return res.status(400).send({message: 'Bot is required'});
@@ -100,11 +136,9 @@ app.post('/addbot', async (req, res) => {
 // Endpoint to change bot status
 app.patch('/changebotstatus', async (req, res) => {
     const {id, newStatus} = req.body;
-    const botsRef = db.collection('bots').doc('bot');
+    const botsRef = db.collection('bots').doc(id);
     const res2 = await botsRef.set({
-        [id]: {
-            'status': newStatus
-        }
+        'status': newStatus
     }, {merge: true});
     if (!res2) {
         return res.status(400).send({message: 'Bot is required'});
