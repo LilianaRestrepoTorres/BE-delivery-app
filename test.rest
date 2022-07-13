@@ -1,30 +1,26 @@
 ###
 GET http://localhost:9393
 
-###
-GET http://localhost:9393/robots
+### Deliveries
+### Query to get all deliveries
+GET http://localhost:9393/deliveries
 
-### Get robot by id
-GET http://localhost:9393/robots/1
-
-### Get robot by status
-GET http://localhost:9393/robots/available
-
-### Create robot
-POST http://localhost:9393/addrobot
+### Query to add delivery
+POST http://localhost:9393/adddelivery
 Content-Type: application/json
 
 {
-    "id": 6,
-    "name": "Robot 6",
-    "status": "available"
+    "id": "third",
+    "creation_date": "2022-07-12",
+    "state": "pending"
 }
 
-### Update robot
-PATCH http://localhost:9393/updaterobot/2
+### Query to update delivery state
+PATCH http://localhost:9393/changestate
 Content-Type: application/json
 
 {
-    "name": "Robot 2 update",
-    "status": "unavailable"
+    "id": "second",
+    "creation_date": "2022-07-12",
+    "newState": "free"
 }
