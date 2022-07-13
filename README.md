@@ -124,6 +124,10 @@ Theses can be found in ```test.rest``` file as well.
 
 https://user-images.githubusercontent.com/17114826/178789104-50d85964-ca39-4a62-a66b-3e3eefa3c81d.mov
 
+## Diagram
+
+![DeliveriesApp](https://user-images.githubusercontent.com/17114826/178791164-619e4f59-a3c7-4d40-b1ea-7311231d5d42.png)
+
 
 ---
  This project was built with 💚 by me.
