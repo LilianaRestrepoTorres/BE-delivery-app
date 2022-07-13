@@ -1,7 +1,12 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
+app.use(cors({
+    origin: 'http://localhost:3000',
+}))
 const port = 9393;
 const { db } = require('./firebase.js');
+
 
 //Middleware
 app.use(express.json());
