@@ -8,7 +8,7 @@ app.use(express.json());
 
 // Main root of the server
 app.get('/', (req, res) => {
-    res.status(200).send({message: 'Hello! This is backend of delivery app.'});
+    res.status(200).send({message: 'Hello! This is the backend of delivery app.'});
 })
 
 // Deliveries Collection Firebase
@@ -129,7 +129,7 @@ app.patch('/changebotstatus', async (req, res) => {
         return res.status(400).send({message: 'Bot is required'});
     }
     
-    res.status(200).send({message: `Your bot was updated successfully`});
+    res.status(200).send({message: `Your bot was updated successfully!`});
 })
 
 app.listen(port, () => {
